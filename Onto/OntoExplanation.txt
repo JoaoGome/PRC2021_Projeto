@@ -1,0 +1,14 @@
+Classes + DataProperties
+
+User: email, password, username.
+
+Superhero: name, full_name, alter_egos, first_appearance, creator, original (Yes se foi inventado por um user, No otherwise)
+
+Power
+
+Object Properties 
+
+:hasPower     User :hasPower Power
+
+:hasSuperhero  User :hasSuperhero :Superhero  (para o caso dos users fazerem custom made heros)
+

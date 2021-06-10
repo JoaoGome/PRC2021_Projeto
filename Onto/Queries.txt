@@ -1,0 +1,62 @@
+
+------------------    Query de ir buscar o nome de todos os superheroes não Originais ------------------
+
+select ?name where { 
+	?s a :Superhero .
+    ?s :original "No" .
+    ?s :name ?name .
+} 
+
+
+------------------    Query de ir buscar os dados (excluindo powers) de todos os superheroes não Originais ------------------
+
+select ?name ?full_name ?creator ?fapp ?egos where { 
+	?s a :Superhero .
+    ?s :original "No" .
+    ?s :name ?name .
+    ?s :creator ?creator .
+    ?s :full_name ?full_name .
+    ?s :first_appearance ?fapp .
+    ?s :alter_egos ?egos .
+} 
+
+
+------------------    Query de ir buscar os dados de um dado superhero dado o nome dele ------------------
+select  ?full_name ?creator ?fapp ?egos where { 
+	?s a :Superhero .
+    ?s :original "No" .
+    ?s :name "${req.params.name}" .
+    ?s :creator ?creator .
+    ?s :full_name ?full_name .
+    ?s :first_appearance ?fapp .
+    ?s :alter_egos ?egos .
+} 
+
+------------------    Query de ir buscar os powers de dado superhero dado o nome dele ------------------
+select ?name ?power where { 
+	?s a :Superhero .
+    ?s :original "No" .
+    ?s :name "${req.params.name}" .
+	?s :hasPower ?power .
+}
+
+------------------    Query de ir buscar todos os powers ------------------
+
+select ?p where { 
+    ?p a :Power .
+} 
+
+------------------    Query de ir buscar o nome de todos os superheroes que têm um dado power ------------------
+
+select ?name where { 
+	?s a :Superhero .
+	?s :name ?name .
+    ?s :hasPower ?p .
+    ?p :name "${req.params.power}" .
+} 
+
+------------------    Query de ir buscar o nome de todos os superheroes não Originais ------------------
+
+------------------    Query de ir buscar o nome de todos os superheroes não Originais ------------------
+------------------    Query de ir buscar o nome de todos os superheroes não Originais ------------------
+------------------    Query de ir buscar o nome de todos os superheroes não Originais ------------------
