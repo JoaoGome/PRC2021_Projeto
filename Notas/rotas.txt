@@ -1,0 +1,174 @@
+
+/artistas -> devolve array com nome dos artistas  
+/albuns -> devolve array com nome dos albuns
+/musicas ->  devolve array com nome das músicas
+
+-------------- // -------------- 
+
+/artistas/:name -> devolve nome e imagem de cada album do artista com nome "name".
+
+formato exemplo para Adele: 
+[
+    {
+        "nome": "25",
+        "image": "https://i.scdn.co/image/ab67616d0000b273856b7a3e75db11219d0a8a5f"
+    },
+    {
+        "nome": "21",
+        "image": "https://i.scdn.co/image/ab67616d0000b2736c2d97f4d6f2b20890cd14aa"
+    },
+    {
+        "nome": "19",
+        "image": "https://i.scdn.co/image/ab67616d0000b2732764f4a78c85e24da4a2161c"
+    }
+]
+
+
+-------------- // -------------- 
+
+/albuns/:name -> devolve imagem, data e numero de musicas do album 
+
+formato exemplo:
+
+[
+    {
+        "image": "https://i.scdn.co/image/ab67616d0000b2736c2d97f4d6f2b20890cd14aa",
+        "data": "2011-02-22",
+        "numeroTracks": "11"
+    }
+]
+
+-------------- // -------------- 
+
+/albuns/musics/:name' -> devolve nome e duração de todas as musicas do album
+
+formato exemplo:
+
+[
+    {
+        "nome": "Rolling in the Deep",
+        "duração": "3:48"
+    },
+    {
+        "nome": "Rumour Has It",
+        "duração": "3:43"
+    }
+]
+
+-------------- // -------------- 
+
+/musicas/:name -> devolve informaçao de todas as musicas com o dado name
+
+Exemplo:
+
+[
+    {
+        "artista": "Adele",
+        "duracao": "4:55",
+        "album": "25",
+        "danceability": "0.585",
+        "popularity": "76",
+        "ratedR": "False"
+    },
+    {
+        "artista": "Lil Wayne",
+        "duracao": "4:3",
+        "album": "I Am Not A Human Being II",
+        "danceability": "0.767",
+        "popularity": "14",
+        "ratedR": "True"
+    }
+]
+
+-------------- // -------------- 
+/musicas/:album/:name -> Devolve informação referente à musica indicada do album indicado
+
+Exemplo: 
+
+[
+    {
+        "artista": "Adele",
+        "duracao": "4:31",
+        "album": "25",
+        "danceability": "0.59",
+        "popularity": "72",
+        "ratedR": "False"
+    }
+]
+
+-------------- // -------------- 
+
+/musicas/popularidade -> devolve lista de todas as musicas ordenadas por popularidade
+
+Exemplo:
+
+[
+    {
+        "musica": "Peaches (feat. Daniel Caesar & Giveon)",
+        "album": "Justice",
+        "artista": "Justin Bieber",
+        "popularity": "98"
+    },
+    {
+        "musica": "positions",
+        "album": "Positions",
+        "artista": "Ariana Grande",
+        "popularity": "88"
+    },
+    {
+        "musica": "34+35",
+        "album": "Positions",
+        "artista": "Ariana Grande",
+        "popularity": "87"
+    }
+]
+
+-------------- // -------------- 
+
+/musicas/danceability -> mesmo que o de cima mas para danceability
+
+-------------- // -------------- 
+
+/musicas/ano/:ano -> devolve todas as musicas do ano
+
+Exemplo:
+
+[
+    {
+        "musica": "2 Much",
+        "album": "Justice (Triple Chucks Deluxe)",
+        "artista": "Justin Bieber"
+    },
+    {
+        "musica": "Deserve You",
+        "album": "Justice (Triple Chucks Deluxe)",
+        "artista": "Justin Bieber"
+    }
+]
+
+-------------- // -------------- 
+
+/albuns/ano/:ano -> mesmo que de cima mas para albuns
+
+só devolve album e artista 
+
+-------------- // -------------- 
+
+/musicas/duracao/:duracao -> devolve todas as musicas que têm uma duracao menor do que a indicada
+
+Exemplo:
+
+[
+    {
+        "musica": "Send My Love (To Your New Lover)",
+        "album": "25",
+        "artista": "Adele",
+        "duracao": "3:43"
+    },
+    {
+        "musica": "River Lea",
+        "album": "25",
+        "artista": "Adele",
+        "duracao": "3:45"
+    }
+]

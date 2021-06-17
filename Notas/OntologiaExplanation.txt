@@ -1,0 +1,19 @@
+
+
+:Artista :nome "nome"
+:Artista :hasAlbum :Album 
+
+
+:Album :nome "nome"
+:Album :numberTracks "number"
+:Album :image "link"
+:Album :hasMusic :Music 
+:Album :data "data"
+
+:Music :duracao "numero"
+:Music :musicNumber "numero"     <-- número da musica no album dela
+:Music :nome "nome"
+:Music :danceability "numero"    <-- número entre 0 e 1. -1 caso nao exista
+:Music :popularity "numero"      <-- numero entre 0 e 100. -1 caso nao exista
+:Music :ratedR "true/false"      <-- caso seja explicita ou nao
+:Music :ofAlbum :Album
