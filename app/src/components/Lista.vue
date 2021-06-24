@@ -12,7 +12,7 @@
       <template v-slot:top>
         <v-text-field
           v-model="search"
-          label="Search for Music Names"
+          :label="label"
           class="mx-4"
         ></v-text-field>
       </template>
@@ -29,6 +29,7 @@
     data () {
       return {
         search: '',
+        label: "Search for " + this.tema + " Names",
         elementos: [],
       }
     },
@@ -38,7 +39,6 @@
           {
             text: 'Musica',
             align: 'start',
-            sortable: false,
             value: 'musica',
           },
           {
@@ -46,7 +46,7 @@
             value: 'album',
           },
           { text: 'Artista', value: 'artista' },
-          { text: 'Popularity', value: 'popularity' }
+          { text: 'Popularity', value: 'popularity' },
         ]
       },
     },

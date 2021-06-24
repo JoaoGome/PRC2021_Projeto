@@ -1,0 +1,26 @@
+Pesquisa por alfabeto -> todos os elementos da categoria que começam por essa letra
+
+
+GERAL 
+    - filtro R rated (se possível)
+    - cores
+
+TOP 
+    - top 6 todos
+    - ver tudo?
+
+ARTISTAS 
+    - tudo
+    - Pesquisa por alfabeto
+
+ALBUNS 
+    - sort by year, name, date
+    - Pesquisa por alfabeto
+
+MUSICA 
+    - data em vez de popularity?
+    - Pesquisa por alfabeto
+
+DANCE 
+    - albuns
+    - musica

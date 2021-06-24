@@ -61,17 +61,20 @@ router.get('/artistas/:name', async function(req, res)
 router.get('/albuns', async function(req, res) 
 {
   var query = `
-              select ?name where { 
-                ?s a :Album .
-                ?s :nome ?name .
-              } 
+  select ?name ?image ?artist where { 
+    ?s a :Album .
+    ?s :nome ?name .
+    ?s :image ?image .
+    ?a :hasAlbum ?s .
+    ?a :nome ?artist .
+} 
               `
 
   var result = await gdb.execQuery(query);
   var results = [];
   
   result.results.bindings.map(b => {
-    results.push(b.name.value);
+    results.push({"nome":b.name.value, "artista":b.artist.value, "imagem":b.image.value});
   })
 
   res.send(results);

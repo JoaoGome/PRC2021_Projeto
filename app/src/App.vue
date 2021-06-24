@@ -2,12 +2,6 @@
   <v-app id="inspire">
     <v-system-bar app>
       <v-spacer></v-spacer>
-
-      <v-icon>mdi-square</v-icon>
-
-      <v-icon>mdi-circle</v-icon>
-
-      <v-icon>mdi-triangle</v-icon>
     </v-system-bar>
 
     <v-app-bar app>
@@ -29,10 +23,10 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
-            Application
+            Music Time
           </v-list-item-title>
           <v-list-item-subtitle>
-            subtext
+            Search it!
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -46,6 +40,7 @@
         <v-list-item
           v-for="item in items"
           :key="item.title"
+          :to="item.to"
           link
         >
           <v-list-item-icon>
@@ -69,7 +64,14 @@
 <script>
   export default {
     data: () => ({ 
-      drawer: null
+      drawer: null,
+      items: [
+          { title: 'Top', icon: 'mdi-arrow-up-bold', to:'/' },
+          { title: 'Artists', icon: 'mdi-account-group', to:'/artists' },
+          { title: 'Albuns', icon: 'mdi-music-circle', to:'/albuns' },
+          { title: 'Music', icon: 'mdi-music', to:'/music' },
+          { title: "Let's dance", icon: 'mdi-flare', to:'/dance' },
+        ]
     }),
   }
 </script>

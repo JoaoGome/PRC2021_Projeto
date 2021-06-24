@@ -3,18 +3,18 @@
     <v-main class="grey lighten-2">
       <v-container>
         <v-row>
-          <template v-for="n in 4">
+          <template v-for="c in categorias">
             <v-col
-              :key="n"
+              :key="c"
               class="mt-2"
               cols="12"
             >
-              <strong>Category {{ n }}</strong>
+              <strong>Top {{c}}</strong>
             </v-col>
 
             <v-col
               v-for="j in 6"
-              :key="`${n}${j}`"
+              :key="`${c}${j}`"
               cols="6"
               md="2"
             >
@@ -31,11 +31,7 @@
 <script>
  export default {
     data: () => ({ 
-      items: [
-          { title: 'Artists', icon: 'mdi-account-group', to:'/artists' },
-          { title: 'Albuns', icon: 'mdi-music-circle', to:'/albuns' },
-          { title: 'Music', icon: 'mdi-music', to:'/music' },
-        ]
+      categorias: ["Artists", "Albuns", "Music"]
     }),
   }
 </script>
