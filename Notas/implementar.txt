@@ -4,10 +4,10 @@ Pesquisa por alfabeto -> todos os elementos da categoria que começam por essa l
 GERAL 
     - filtro R rated (se possível)
     - cores
+    - search procurar só num parametro
 
 TOP 
-    - top 6 todos
-    - ver tudo?
+    - top 6 artistas
 
 ARTISTAS 
     - tudo
@@ -27,5 +27,19 @@ DANCE
 
 PAGINA INDIVIDUAL
     - artista 
-    - album -> pedir por ordem mais popular
+    - album
     - musica
+
+---------------------------------------- ROTAS -----------------------------------------
+POPULARIDADE
+    - artistas mais populares, top smth top 20? 50?
+    - albuns mais populares, top 50?
+    - limitar musicas mais populares -> top 100
+
+DANCEABILITY 
+    - albuns com mais danceability
+    - nao sei se deve fazer top smth nestes? maybe:
+        - top 100 albuns?
+        - top 200 musicas?
+
+ROTA ALBUNS

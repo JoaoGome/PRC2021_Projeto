@@ -2,32 +2,24 @@
   <v-row>
 
     <template>
-      <v-col
-        class="mt-2"
-        cols="12"
-      >
-        <strong>Top Artists</strong>
-      </v-col>
-
-      <Top :elementos="albuns" :itemsPerPage="6"/>
 
       <v-col
         class="mt-2"
         cols="12"
       >
-        <strong>Top Albuns</strong>
+        <strong>Top Dance Albuns</strong>
       </v-col>
 
-      <Top :elementos="albuns" :keys="key" :itemsPerPage="6"/>
+      <Top :elementos="albuns" :keys="key" :itemsPerPage="12"/>
 
       <v-col
         class="mt-2"
         cols="12"
       >
-        <strong>Top Musics</strong>
+        <strong>Top Dance Music</strong>
       </v-col>
 
-      <Top :elementos="musicas" :keys="key" :itemsPerPage="6"/>
+      <Top :elementos="musicas" :keys="key" :itemsPerPage="12"/>
 
 
     </template>
@@ -67,22 +59,8 @@
         })
         .catch(this.r = 'error' )
 
-     /* axios
-        .get('http://localhost:8080/teste/albuns')
-        .then(res => {
-          this.artistas = res.data;
-          var id = 0
-          for (var i = 0; i < this.artistas.length; i++)
-          {
-            this.artistas[i]["id"] = id;
-            id++;
-          }
-            
-        })
-        .catch(this.r = 'error' )
-*/
       axios
-        .get('http://localhost:8080/teste/musicas/popularidade')
+        .get('http://localhost:8080/teste/musicas/danceability')
         .then(res => {
           this.musicas = res.data;
           var id = 0

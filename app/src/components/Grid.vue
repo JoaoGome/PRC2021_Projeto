@@ -32,7 +32,7 @@
               flat
               solo-inverted
               hide-details
-              :items="keys"
+              :items="keysSort"
               prepend-inner-icon="mdi-magnify"
               label="Sort by"
             ></v-select>
@@ -72,27 +72,26 @@
             md="4"
             lg="3"
           >
-            <v-card>
+            <v-card height=100%>
               <v-img
                 :src=item.imagem
               ></v-img>
               <v-card-title class="subheading font-weight-bold">
-                {{ item.nome }}
+                {{ item.name }}
               </v-card-title>
 
               <v-divider></v-divider>
 
               <v-list dense>
-                <v-list-item
-                  v-for="(key, index) in filteredKeys"
+                <v-list-item 
+                  v-for="(key, index) in keysShow"
                   :key="index"
                 >
-                  <v-list-item-content :class="{ 'blue--text': sortBy === key }">
+                  <v-list-item-content>
                     {{ key }}:
                   </v-list-item-content>
                   <v-list-item-content
                     class="align-end"
-                    :class="{ 'blue--text': sortBy === key }"
                   >
                     {{ item[key.toLowerCase()] }}
                   </v-list-item-content>
@@ -185,9 +184,8 @@
         page: 1,
         itemsPerPage: 8,
         sortBy: 'name',
-        keys: [
-          'Artista',
-        ],
+        keysSort: ['Artist', 'Date', 'Name'],
+        keysShow: ['Artist', 'Year'],
       }
     },
     created: function () {
@@ -209,9 +207,6 @@
     computed: {
       numberOfPages () {
         return Math.ceil(this.elementos.length / this.itemsPerPage)
-      },
-      filteredKeys () {
-        return this.keys.filter(key => key !== 'Name')
       },
     },
     methods: {

@@ -1,24 +1,24 @@
 <template>
-  <v-app>
-    <div>
-    <v-data-table
-      :headers="headers"
-      :items="elementos"
-      item-key="id"
-      class="elevation-1"
-      :search="search"
-      :custom-filter="filterOnlyCapsText"
-    >
+  <v-container fluid fill-height>
+    <v-card width="100vw">
+      <v-data-table
+        :headers="headers"
+        :items="elementos"
+        :sort-by="[]"
+        :sort-desc="[]"
+        multi-sort
+        class="elevation-1"
+      >
       <template v-slot:top>
-        <v-text-field
-          v-model="search"
-          :label="label"
-          class="mx-4"
-        ></v-text-field>
+          <v-text-field
+            v-model="search"
+            :label="label"
+            class="mx-4"
+          ></v-text-field>
       </template>
-    </v-data-table>
-  </div>
-  </v-app>
+      </v-data-table> 
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -46,7 +46,7 @@
             value: 'album',
           },
           { text: 'Artista', value: 'artista' },
-          { text: 'Popularity', value: 'popularity' },
+          { text: 'Date', value: 'date' },
         ]
       },
     },

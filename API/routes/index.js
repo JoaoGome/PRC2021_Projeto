@@ -61,20 +61,23 @@ router.get('/artistas/:name', async function(req, res)
 router.get('/albuns', async function(req, res) 
 {
   var query = `
-  select ?name ?image ?artist where { 
+  select ?name ?image ?artist (strbefore(?d,"-") as ?ano) ?d where { 
     ?s a :Album .
     ?s :nome ?name .
     ?s :image ?image .
     ?a :hasAlbum ?s .
     ?a :nome ?artist .
-} 
+    ?s :data ?d .
+}  
               `
 
   var result = await gdb.execQuery(query);
   var results = [];
   
   result.results.bindings.map(b => {
-    results.push({"nome":b.name.value, "artista":b.artist.value, "imagem":b.image.value});
+    var ano = b.ano.value;
+    if (ano == "") ano = b.d.value.split('-')[0]
+    results.push({"name":b.name.value, "artist":b.artist.value, "imagem":b.image.value, "year":ano, "date":b.d.value});
   })
 
   res.send(results);
@@ -190,18 +193,29 @@ router.get('/albuns/ano/:ano', async function(req, res)
 // devolve um array com lista de nomes das músicas
 router.get('/musicas', async function(req, res) 
 {
-  var query = `
-              select ?name where { 
-                ?s a :Musica .
-                ?s :nome ?name .
-              } 
-              `
+  var query =  `
+  select ?nomeMusica ?nomeAlbum ?nartista ?data where { 
+    ?musica a :Musica .
+    ?musica :nome ?nomeMusica .
+    ?musica :ofAlbum ?album .
+    ?album :nome ?nomeAlbum .
+    ?artista :hasAlbum ?album .
+    ?artista :nome ?nartista .
+    ?album :data ?data .
+  }
+  order by (?nomeMusica) 
+  `
 
   var result = await gdb.execQuery(query);
   var results = [];
   
   result.results.bindings.map(b => {
-    results.push(b.name.value);
+    results.push({
+      "musica": b.nomeMusica.value,
+      "album": b.nomeAlbum.value,
+      "artista": b.nartista.value,
+      "date": b.data.value.split('-')[0] + '-' + b.data.value.split('-')[1]
+    });
   })
 
   res.send(results);
@@ -212,7 +226,7 @@ router.get('/musicas', async function(req, res)
 router.get('/musicas/popularidade', async function(req, res) 
 {
   var query = `
-              select ?nomeMusica ?nomeAlbum ?nartista ?popularity where { 
+              select ?nomeMusica ?nomeAlbum ?nartista ?popularity ?data ?imagem where { 
                 ?musica a :Musica .
                 ?musica :nome ?nomeMusica .
                 ?musica :ofAlbum ?album .
@@ -220,8 +234,11 @@ router.get('/musicas/popularidade', async function(req, res)
                 ?album :nome ?nomeAlbum .
                 ?artista :hasAlbum ?album .
                 ?artista :nome ?nartista .
+                ?album :data ?data .
+                ?album :image ?imagem .
               }
               order by desc (?popularity) 
+              limit 100
               `
 
   var result = await gdb.execQuery(query);
@@ -234,7 +251,9 @@ router.get('/musicas/popularidade', async function(req, res)
       "musica": b.nomeMusica.value,
       "album": b.nomeAlbum.value,
       "artista": b.nartista.value,
-      "popularity": b.popularity.value
+      "popularity": b.popularity.value,
+      "date": b.data.value,
+      "imagem": b.imagem.value,
     }
 
     results.push(info)
@@ -249,12 +268,13 @@ router.get('/musicas/popularidade', async function(req, res)
 router.get('/musicas/danceability', async function(req, res) 
 {
   var query = `
-              select ?nomeMusica ?nomeAlbum ?nartista ?danceability where { 
+              select ?nomeMusica ?nomeAlbum ?nartista ?danceability ?imagem where { 
                 ?musica a :Musica .
                 ?musica :nome ?nomeMusica .
                 ?musica :ofAlbum ?album .
                 ?musica :danceability ?danceability .
                 ?album :nome ?nomeAlbum .
+                ?album :image ?imagem .
                 ?artista :hasAlbum ?album .
                 ?artista :nome ?nartista .
               }
@@ -270,7 +290,8 @@ router.get('/musicas/danceability', async function(req, res)
       "musica": b.nomeMusica.value,
       "album": b.nomeAlbum.value,
       "artista": b.nartista.value,
-      "danceability": b.danceability.value
+      "danceability": b.danceability.value,
+      "imagem": b.imagem.value
     }
 
     results.push(info)

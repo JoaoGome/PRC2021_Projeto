@@ -4,6 +4,7 @@ import Main from '../views/Main.vue'
 import Artists from '../views/Artists.vue'
 import Albuns from '../views/Albuns.vue'
 import Music from '../views/Music.vue'
+import Dance from '../views/Dance.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/music',
     name: 'Music',
     component: Music
+  },
+  {
+    path: '/dance',
+    name: 'Dance',
+    component: Dance
   },
 ]
 

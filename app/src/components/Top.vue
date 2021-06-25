@@ -20,7 +20,7 @@
               :src=item.imagem
             ></v-img>
             <v-card-title class="justify-center align-center">
-              {{ item.nome }}
+              {{ item.name }}
             </v-card-title>
 
 
@@ -31,7 +31,6 @@
               >
                 <v-list-item-content 
                   class="align-end justify-center"
-                  :class="{ 'blue--text': sortBy === key }"
                 >
                   <v-divider class="pa-md-2"></v-divider>
                   
@@ -87,11 +86,10 @@
 <script>
   export default {
     
-    props:["elementos", "keys"],
+    props:["elementos", "keys", "itemsPerPage"],
 
     data: () => ({ 
       page: 1,
-      itemsPerPage: 6,
     }),
 
     computed: {

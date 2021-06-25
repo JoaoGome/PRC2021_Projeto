@@ -1,5 +1,5 @@
 <template>
-  <Lista site="musicas/popularidade" tema="Music"/>
+  <Lista site="musicas" tema="Music"/>
 </template>
 
 <script>
