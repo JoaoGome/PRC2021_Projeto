@@ -54,14 +54,7 @@
       axios
         .get('http://localhost:8080/teste/'+ this.site)
         .then(res => {
-          this.elementos = res.data;
-          var id = 0
-          for (var i = 0; i < this.elementos.length; i++)
-          {
-            this.elementos[i]["id"] = id;
-            id++;
-          }
-            
+          this.elementos = res.data;            
           this.search = ''
         })
         .catch(this.r = 'error' )

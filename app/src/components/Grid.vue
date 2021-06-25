@@ -74,7 +74,8 @@
           >
             <v-card height=100%>
               <v-img
-                :src=item.imagem
+                lazy-src="@/assets/music-image.jpeg"
+                :src="getImgUrl(item.imagem)"
               ></v-img>
               <v-card-title class="subheading font-weight-bold">
                 {{ item.name }}
@@ -172,7 +173,7 @@
 <script>
   import axios from 'axios';
   export default {
-    props:["site", "tema"],
+    props:["site", "tema", "keysSort", "keysShow"],
 
     data () {
       return {
@@ -184,22 +185,14 @@
         page: 1,
         itemsPerPage: 8,
         sortBy: 'name',
-        keysSort: ['Artist', 'Date', 'Name'],
-        keysShow: ['Artist', 'Year'],
       }
     },
     created: function () {
       axios
-        .get('http://localhost:8080/teste/albuns')
+        .get('http://localhost:8080/teste/' + this.site)
         .then(res => {
           this.elementos = res.data;
-          var id = 0
-          for (var i = 0; i < this.elementos.length; i++)
-          {
-            this.elementos[i]["id"] = id;
-            id++;
-          }
-            
+
           this.search = ''
         })
         .catch(this.r = 'error' )
@@ -219,6 +212,14 @@
       updateItemsPerPage (number) {
         this.itemsPerPage = number
       },
+      getImgUrl(imagem){
+        if( !imagem.includes('/') ){
+          var images = require.context('@/assets/imagens/', false, /\.jpeg$/)
+          return images('./' + imagem)
+        }
+        else
+          return imagem
+      }
     },
     
   }

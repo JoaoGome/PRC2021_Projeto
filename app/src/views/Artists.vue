@@ -1,13 +1,13 @@
 <template>
-  <Lista site="musicas/popularidade" tema="Music"/>
+  <Grid site="artistas" tema="Artist" :keysSort="['Name']"/>
 </template>
 
 <script>
-import Lista from "@/components/Lista.vue";
+import Grid from "@/components/Grid.vue";
 
 export default {
   components: {
-    Lista
+    Grid
   },
 
 };

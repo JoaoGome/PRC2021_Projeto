@@ -6,40 +6,29 @@ GERAL
     - cores
     - search procurar só num parametro
 
-TOP 
-    - top 6 artistas
-
 ARTISTAS 
-    - tudo
     - Pesquisa por alfabeto
 
 ALBUNS 
-    - sort by year, name, date
     - Pesquisa por alfabeto
 
 MUSICA 
-    - data em vez de popularity?
     - Pesquisa por alfabeto
 
-DANCE 
-    - albuns
-    - musica
 
 PAGINA INDIVIDUAL
     - artista 
     - album
     - musica
 
----------------------------------------- ROTAS -----------------------------------------
-POPULARIDADE
-    - artistas mais populares, top smth top 20? 50?
-    - albuns mais populares, top 50?
-    - limitar musicas mais populares -> top 100
+imagens:
+- taylor swift
+- brandy
+- torretn
+- bow wow
+- avant
+- asap rocky
 
-DANCEABILITY 
-    - albuns com mais danceability
-    - nao sei se deve fazer top smth nestes? maybe:
-        - top 100 albuns?
-        - top 200 musicas?
-
-ROTA ALBUNS
+tirar acento:
+- beyonce
+- celine 

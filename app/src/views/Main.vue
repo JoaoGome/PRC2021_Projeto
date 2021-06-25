@@ -9,7 +9,7 @@
         <strong>Top Artists</strong>
       </v-col>
 
-      <Top :elementos="albuns" :itemsPerPage="6"/>
+      <Top :elementos="artistas" :keys="['imagem']" :itemsPerPage="6"/>
 
       <v-col
         class="mt-2"
@@ -54,7 +54,13 @@
 
     created: function () {
       axios
-        .get('http://localhost:8080/teste/albuns')
+        .get('http://localhost:8080/teste/artistas/popularity')
+        .then(res => {
+          this.artistas = res.data;
+        })
+        .catch(this.r = 'error' )
+      axios
+        .get('http://localhost:8080/teste/albuns/popularity')
         .then(res => {
           this.albuns = res.data;
           var id = 0
@@ -63,24 +69,8 @@
             this.albuns[i]["id"] = id;
             id++;
           }
-            
         })
         .catch(this.r = 'error' )
-
-     /* axios
-        .get('http://localhost:8080/teste/albuns')
-        .then(res => {
-          this.artistas = res.data;
-          var id = 0
-          for (var i = 0; i < this.artistas.length; i++)
-          {
-            this.artistas[i]["id"] = id;
-            id++;
-          }
-            
-        })
-        .catch(this.r = 'error' )
-*/
       axios
         .get('http://localhost:8080/teste/musicas/popularidade')
         .then(res => {

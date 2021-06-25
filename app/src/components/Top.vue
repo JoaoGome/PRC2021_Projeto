@@ -17,7 +17,8 @@
           <v-card height=100%>
             <v-img
               lazy-src="@/assets/music-image.jpeg"
-              :src=item.imagem
+              :src="`${getImgUrl(item.imagem)}`"
+              max-width="200"
             ></v-img>
             <v-card-title class="justify-center align-center">
               {{ item.name }}
@@ -96,6 +97,7 @@
       numberOfPages () {
         return Math.ceil(this.elementos.length / this.itemsPerPage)
       },
+
     },
 
     methods: {
@@ -104,6 +106,14 @@
       },
       formerPage () {
         if (this.page - 1 >= 1) this.page -= 1
+      },
+      getImgUrl(imagem){
+        if( !imagem.includes('/') ){
+          var images = require.context('@/assets/imagens/', false, /\.jpeg$/)
+          return images('./' + imagem)
+        }
+        else
+          return imagem
       }
     },
 
