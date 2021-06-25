@@ -24,3 +24,8 @@ MUSICA
 DANCE 
     - albuns
     - musica
+
+PAGINA INDIVIDUAL
+    - artista 
+    - album -> pedir por ordem mais popular
+    - musica

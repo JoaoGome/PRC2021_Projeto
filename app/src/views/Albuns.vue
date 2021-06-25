@@ -1,5 +1,5 @@
 <template>
-  <Grid site="albuns" tema="Album" :colunas='titulos'/>
+  <Grid site="albuns" tema="Album"/>
 </template>
 
 <script>
