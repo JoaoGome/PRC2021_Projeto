@@ -2,6 +2,7 @@
   <v-app>
     <v-container fluid>
     <v-data-iterator
+      v-model="thisone"
       :items="elementos"
       :items-per-page.sync="itemsPerPage"
       :page.sync="page"

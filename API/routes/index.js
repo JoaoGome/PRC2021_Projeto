@@ -24,7 +24,6 @@ router.get('/artistas', async function(req, res)
       "imagem": b.name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "") + ".jpeg"
     });
   })
-  console.log("Lil' Kim".normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
 
   res.send(results);
 

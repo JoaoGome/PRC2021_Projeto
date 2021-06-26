@@ -4,7 +4,6 @@ Pesquisa por alfabeto -> todos os elementos da categoria que começam por essa l
 GERAL 
     - filtro R rated (se possível)
     - cores
-    - search procurar só num parametro
 
 ARTISTAS 
     - Pesquisa por alfabeto
@@ -22,13 +21,4 @@ PAGINA INDIVIDUAL
     - musica
 
 imagens:
-- taylor swift
-- brandy
-- torretn
-- bow wow
-- avant
 - asap rocky
-
-tirar acento:
-- beyonce
-- celine 

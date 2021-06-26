@@ -2,8 +2,10 @@
   <v-container fluid fill-height>
     <v-card width="100vw">
       <v-data-table
+        v-model="musica"
         :headers="headers"
         :items="elementos"
+        :search="search"
         :sort-by="[]"
         :sort-desc="[]"
         multi-sort
@@ -44,9 +46,18 @@
           {
             text: 'Album',
             value: 'album',
+            filterable: false
           },
-          { text: 'Artista', value: 'artista' },
-          { text: 'Date', value: 'date' },
+          { 
+            text: 'Artista', 
+            value: 'artista', 
+            filterable: false
+          },
+          { 
+            text: 'Date', 
+            value: 'date', 
+            filterable: false
+          },
         ]
       },
     },
@@ -58,14 +69,6 @@
           this.search = ''
         })
         .catch(this.r = 'error' )
-    },
-    methods: {
-      filterOnlyCapsText (value, search) {
-        return value != null &&
-          search != null &&
-          typeof value === 'string' &&
-          value.toString().indexOf(search) !== -1
-      },
-    },
+    }
   }
 </script>
