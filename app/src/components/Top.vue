@@ -87,7 +87,7 @@
 <script>
   export default {
     
-    props:["elementos", "keys", "itemsPerPage"],
+    props:["elementos", "keys", "itemsPerPage", "axios", "rRated"],
 
     data: () => ({ 
       page: 1,
@@ -114,7 +114,8 @@
         }
         else
           return imagem
-      }
+      },
+      
     },
 
   }

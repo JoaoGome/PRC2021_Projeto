@@ -186,11 +186,13 @@
         page: 1,
         itemsPerPage: 8,
         sortBy: 'name',
+        filterRrated: '',
       }
     },
     created: function () {
+      if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
       axios
-        .get('http://localhost:8080/teste/' + this.site)
+        .get('http://localhost:8080/teste/' + this.site + this.filterRrated)
         .then(res => {
           this.elementos = res.data;
 

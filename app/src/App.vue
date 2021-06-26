@@ -24,6 +24,8 @@
         <v-list-item-content>
           <v-list-item-title class="text-h6">
             Music Time
+            {{this.$route.query.rRated}}
+            {{this.printit}}
           </v-list-item-title>
           <v-list-item-subtitle>
             Search it!
@@ -52,10 +54,20 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <v-divider></v-divider>
+
+      <v-switch
+        v-model="rRated"
+        :label="`R-Rated Music`"
+        color="red"
+        class="ml-4"
+      ></v-switch>
+
     </v-navigation-drawer>
       <v-main class="grey lighten-2">
         <v-container>
-          <router-view/>
+          <router-view :rRated="rRated" />
         </v-container>
       </v-main>
   </v-app>
@@ -64,7 +76,10 @@
 <script>
   export default {
     data: () => ({ 
+      rRated: null,
+      inicio: true,
       drawer: null,
+      printit: '',
       items: [
           { title: 'Top', icon: 'mdi-arrow-up-bold', to:'/' },
           { title: 'Artists', icon: 'mdi-account-group', to:'/artists' },
@@ -73,5 +88,22 @@
           { title: "Let's dance", icon: 'mdi-flare', to:'/dance' },
         ]
     }),
+    created: function(){
+      if (this.$route.query.rRated == "false") this.rRated = false
+      else this.rRated = true
+    },
+    methods:{
+      reloadRchanged(filterRrated){
+        window.location.href = `${window.location.pathname}?rRated=${filterRrated}`;
+      }
+    },
+    watch: {
+      rRated(newValue){
+        if(!this.inicio)
+          this.reloadRchanged(newValue)
+        this.inicio = false; 
+      }
+    }
+
   }
 </script>

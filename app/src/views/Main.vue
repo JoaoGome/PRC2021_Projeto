@@ -9,7 +9,7 @@
         <strong>Top Artists</strong>
       </v-col>
 
-      <Top :elementos="artistas" :keys="['imagem']" :itemsPerPage="6"/>
+      <Top :elementos="artistas" :itemsPerPage="6"/>
 
       <v-col
         class="mt-2"
@@ -27,7 +27,7 @@
         <strong>Top Musics</strong>
       </v-col>
 
-      <Top :elementos="musicas" :keys="key" :itemsPerPage="6"/>
+      <Top :elementos="musicas" :keys="key" :itemsPerPage="6" :rRated="this.rRated" />
 
 
     </template>
@@ -43,50 +43,46 @@
       Top,
     },
 
+    props:["rRated"],
+
     data(){
       return{ 
         artistas: [],
         albuns: [],
         musicas: [],
         key: ["Artist"],
+        filterRrated: ''
       }
     },
 
+    computed: {
+      numberOfPages () {
+        return Math.ceil(this.elementos.length / this.itemsPerPage)
+      },
+
+    },
+
     created: function () {
+
+      if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
+      
       axios
-        .get('http://localhost:8080/teste/artistas/popularity')
+        .get('http://localhost:8080/teste/artistas/popularity' + this.filterRrated)
         .then(res => {
           this.artistas = res.data;
         })
         .catch(this.r = 'error' )
       axios
-        .get('http://localhost:8080/teste/albuns/popularity')
+        .get('http://localhost:8080/teste/albuns/popularity' + this.filterRrated)
         .then(res => {
           this.albuns = res.data;
-          var id = 0
-          for (var i = 0; i < this.albuns.length; i++)
-          {
-            this.albuns[i]["id"] = id;
-            id++;
-          }
         })
         .catch(this.r = 'error' )
       axios
-        .get('http://localhost:8080/teste/musicas/popularidade')
+        .get('http://localhost:8080/teste/musicas/popularidade' + this.filterRrated)
         .then(res => {
           this.musicas = res.data;
-          var id = 0
-          for (var i = 0; i < this.musicas.length; i++)
-          {
-            this.musicas[i] =
-            {"name": res.data[i].musica,
-              "id": id,
-              "artist": res.data[i].artista,
-              "imagem": res.data[i].imagem
-            }
-            id++;
-          }
-            
+          
         })
         .catch(this.r = 'error' )
   

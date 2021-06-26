@@ -41,19 +41,21 @@
         albuns: [],
         musicas: [],
         key: ["Artist"],
+        filterRrated: '',
       }
     },
 
     created: function () {
+      if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
       axios
-        .get('http://localhost:8080/teste/albuns/danceability')
+        .get('http://localhost:8080/teste/albuns/danceability' + this.filterRrated)
         .then(res => {
           this.albuns = res.data;         
         })
         .catch(this.r = 'error' )
 
       axios
-        .get('http://localhost:8080/teste/musicas/danceability')
+        .get('http://localhost:8080/teste/musicas/danceability' + this.filterRrated)
         .then(res => {
           this.musicas = res.data;
         })

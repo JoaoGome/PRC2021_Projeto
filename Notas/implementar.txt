@@ -1,9 +1,8 @@
 Pesquisa por alfabeto -> todos os elementos da categoria que começam por essa letra
 
-
 GERAL 
-    - filtro R rated (se possível)
     - cores
+    - fix search grid
 
 ARTISTAS 
     - Pesquisa por alfabeto
@@ -16,9 +15,10 @@ MUSICA
 
 
 PAGINA INDIVIDUAL
+    - filtro R rated
     - artista 
     - album
     - musica
 
-imagens:
-- asap rocky
+error:
+- panic image

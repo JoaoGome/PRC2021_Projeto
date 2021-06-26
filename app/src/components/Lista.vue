@@ -33,6 +33,7 @@
         search: '',
         label: "Search for " + this.tema + " Names",
         elementos: [],
+        filterRrated: '',
       }
     },
     computed: {
@@ -62,8 +63,10 @@
       },
     },
     created: function () {
+      if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
+      
       axios
-        .get('http://localhost:8080/teste/'+ this.site)
+        .get('http://localhost:8080/teste/'+ this.site + this.filterRrated)
         .then(res => {
           this.elementos = res.data;            
           this.search = ''
