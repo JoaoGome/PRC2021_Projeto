@@ -80,21 +80,31 @@
       inicio: true,
       drawer: null,
       printit: '',
-      items: [
-          { title: 'Top', icon: 'mdi-arrow-up-bold', to:'/' },
-          { title: 'Artists', icon: 'mdi-account-group', to:'/artists' },
-          { title: 'Albuns', icon: 'mdi-music-circle', to:'/albuns' },
-          { title: 'Music', icon: 'mdi-music', to:'/music' },
-          { title: "Let's dance", icon: 'mdi-flare', to:'/dance' },
-        ]
+
     }),
     created: function(){
       if (this.$route.query.rRated == "false") this.rRated = false
       else this.rRated = true
     },
+    computed:{
+      items(){ 
+        return [
+          { title: 'Top', icon: 'mdi-arrow-up-bold', to:`/?rRated=${this.rRated}` },
+          { title: 'Artists', icon: 'mdi-account-group', to:`/artists?rRated=${this.rRated}` },
+          { title: 'Albuns', icon: 'mdi-music-circle', to:`/albuns?rRated=${this.rRated}` },
+          { title: 'Music', icon: 'mdi-music', to:`/music?rRated=${this.rRated}` },
+          { title: "Let's dance", icon: 'mdi-flare', to:`/dance?rRated=${this.rRated}` },
+        ]
+      }
+
+    },
     methods:{
       reloadRchanged(filterRrated){
         window.location.href = `${window.location.pathname}?rRated=${filterRrated}`;
+      },
+      getURL(s){
+        console.log(s)
+        return '/'
       }
     },
     watch: {

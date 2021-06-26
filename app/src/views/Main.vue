@@ -9,7 +9,7 @@
         <strong>Top Artists</strong>
       </v-col>
 
-      <Top :elementos="artistas" :itemsPerPage="6"/>
+      <Top :elementos="artistas" tema="Artist" :itemsPerPage="6"/>
 
       <v-col
         class="mt-2"
@@ -18,7 +18,7 @@
         <strong>Top Albuns</strong>
       </v-col>
 
-      <Top :elementos="albuns" :keys="key" :itemsPerPage="6"/>
+      <Top :elementos="albuns" tema="Album" :keys="key" :itemsPerPage="6"/>
 
       <v-col
         class="mt-2"
@@ -27,7 +27,7 @@
         <strong>Top Musics</strong>
       </v-col>
 
-      <Top :elementos="musicas" :keys="key" :itemsPerPage="6" :rRated="this.rRated" />
+      <Top :elementos="musicas" tema="Music" :keys="key" :itemsPerPage="6" :rRated="this.rRated" />
 
 
     </template>

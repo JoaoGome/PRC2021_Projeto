@@ -73,7 +73,7 @@
             md="4"
             lg="3"
           >
-            <v-card height=100%>
+            <v-card height=100% :href="getURL(item.id)">
               <v-img
                 lazy-src="@/assets/music-image.jpeg"
                 :src="getImgUrl(item.imagem)"
@@ -222,6 +222,12 @@
         }
         else
           return imagem
+      },
+      getURL(id){
+        if(this.tema === "Artist")
+          return "/artist/" + id + this.filterRrated
+        if(this.tema === "Album")
+          return "/album/" + id + this.filterRrated
       }
     },
     

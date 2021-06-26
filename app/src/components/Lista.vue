@@ -10,6 +10,7 @@
         :sort-desc="[]"
         multi-sort
         class="elevation-1"
+        @click:row="handleClick"
       >
       <template v-slot:top>
           <v-text-field
@@ -72,6 +73,11 @@
           this.search = ''
         })
         .catch(this.r = 'error' )
+    },
+    methods:{
+      handleClick(row){
+        window.location.href = `/music/` + row.id + this.filterRrated ;
+      }
     }
   }
 </script>

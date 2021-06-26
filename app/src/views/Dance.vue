@@ -10,7 +10,7 @@
         <strong>Top Dance Albuns</strong>
       </v-col>
 
-      <Top :elementos="albuns" :keys="key" :itemsPerPage="6"/>
+      <Top :elementos="albuns" tema="Album" :keys="key" :itemsPerPage="6"/>
 
       <v-col
         class="mt-2"
@@ -19,7 +19,7 @@
         <strong>Top Dance Music</strong>
       </v-col>
 
-      <Top :elementos="musicas" :keys="key" :itemsPerPage="6"/>
+      <Top :elementos="musicas" tema="Music" :keys="key" :itemsPerPage="6"/>
 
 
     </template>

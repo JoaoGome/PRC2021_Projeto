@@ -15,7 +15,6 @@ MUSICA
 
 
 PAGINA INDIVIDUAL
-    - filtro R rated
     - artista 
     - album
     - musica

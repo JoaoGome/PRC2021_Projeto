@@ -14,7 +14,7 @@
           cols="6"
           md="2"
         >
-          <v-card height=100%>
+          <v-card height=100% :href="getURL(item.id)">
             <v-img
               lazy-src="@/assets/music-image.jpeg"
               :src="`${getImgUrl(item.imagem)}`"
@@ -87,10 +87,11 @@
 <script>
   export default {
     
-    props:["elementos", "keys", "itemsPerPage", "axios", "rRated"],
+    props:["elementos", "keys", "itemsPerPage", "axios", "rRated", "tema"],
 
     data: () => ({ 
       page: 1,
+      filterRrated: ''
     }),
 
     computed: {
@@ -115,6 +116,15 @@
         else
           return imagem
       },
+      getURL(id){
+        if (this.$route.query.rRated === "false") this.filterRrated = "?rRated=false"
+        if(this.tema === "Artist")
+          return "/artist/" + id + this.filterRrated
+        if(this.tema === "Album")
+          return "/album/" + id + this.filterRrated
+        if(this.tema === "Music")
+          return "/music/" + id + this.filterRrated
+      }
       
     },
 
