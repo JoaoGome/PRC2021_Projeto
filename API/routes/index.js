@@ -10,7 +10,7 @@ router.get('/artistas', async function(req, res)
   if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
   
   var query = `
-  select ?id ?name (MIN(?rated) as ?rRated) where { 
+  select distinct ?id ?name (MIN(?rated) as ?rRated) where { 
     ?id a :Artista .
     ?id :nome ?name ;
         :hasAlbum ?album .
@@ -44,7 +44,7 @@ router.get('/artistas/popularity', async function(req, res)
   if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
   
   var query = `
-  select ?art ?nartista (SUM(?popularity) as ?popularity) (MIN(?rated) as ?rRated) where { 
+  select distinct ?art ?nartista (SUM(?popularity) as ?popularity) (MIN(?rated) as ?rRated) where { 
     ?art a :Artista .
     ?art :hasAlbum ?album .
     ?album :hasMusic ?music .
@@ -151,7 +151,7 @@ router.get('/albuns', async function(req, res)
   if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
   
   var query = `
-  select ?s ?name ?image ?artist ?d where { 
+  select distinct ?s ?name ?image ?artist ?d where { 
     ?s a :Album .
     ?s :nome ?name .
     ?s :image ?image .
@@ -190,7 +190,7 @@ router.get('/albuns/popularity', async function(req, res)
   if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
   
   var query = `
-  select ?album ?nome ?nartista (SUM(?popularity) as ?popularity) (SAMPLE(?imagem) as ?imagem) (MIN(?rated) as ?rRated) where { 
+  select distinct ?album ?nome ?nartista (SUM(?popularity) as ?popularity) (SAMPLE(?imagem) as ?imagem) (MIN(?rated) as ?rRated) where { 
     ?album a :Album .
     ?album :nome ?nome .
     ?album :hasMusic ?music .
@@ -235,7 +235,7 @@ router.get('/albuns/danceability', async function(req, res)
   if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
   
   var query = `
-  select ?album ?nome ?nartista (SUM(?danceability) as ?danceability) (SAMPLE(?imagem) as ?imagem) (MIN(?rated) as ?rRated) where { 
+  select distinct ?album ?nome ?nartista (SUM(?danceability) as ?danceability) (SAMPLE(?imagem) as ?imagem) (MIN(?rated) as ?rRated) where { 
     ?album a :Album .
     ?album :nome ?nome .
     ?album :hasMusic ?music .
@@ -348,7 +348,7 @@ router.get('/albuns/musics/:name', async function(req, res)
   if (req.params.name)
   {
     var query = `
-                select ?name ?duracao where { 
+                select distinct ?name ?duracao where { 
                   ?album a :Album .
                   ?album :nome "${req.params.name}" .
                   ?album :hasMusic ?music .
@@ -382,7 +382,7 @@ router.get('/albuns/ano/:ano', async function(req, res)
   if (req.params.ano)
   {
     var query = `
-              select ?album ?nomeAlbum ?nartista ?data (MIN(?rated) as ?rRated) where { 
+              select distinct ?album ?nomeAlbum ?nartista ?data (MIN(?rated) as ?rRated) where { 
                 ?album a :Album .
                 ?album :nome ?nomeAlbum .
                 ?album :data ?data .
@@ -428,7 +428,7 @@ router.get('/musicas', async function(req, res)
   if (req.query.rRated && req.query.rRated == "false") filter = 'FILTER(?rated = "False")';
 
   var query =  `
-  select ?musica ?nomeMusica ?nomeAlbum ?nartista ?data where { 
+  select distinct ?musica ?nomeMusica ?nomeAlbum ?nartista ?data where { 
     ?musica a :Musica .
     ?musica :nome ?nomeMusica .
     ?musica :ofAlbum ?album .
@@ -465,7 +465,7 @@ router.get('/musicas/popularidade', async function(req, res)
   var filter = '';
   if (req.query.rRated && req.query.rRated == "false") filter = 'FILTER(?rated = "False")';
   var query = `
-              select ?musica ?nomeMusica ?nomeAlbum ?nartista ?popularity ?data ?imagem where { 
+              select distinct ?musica ?nomeMusica ?nomeAlbum ?nartista ?popularity ?data ?imagem where { 
                 ?musica a :Musica .
                 ?musica :nome ?nomeMusica .
                 ?musica :ofAlbum ?album .
@@ -513,7 +513,7 @@ router.get('/musicas/danceability', async function(req, res)
   if (req.query.rRated && req.query.rRated == "false") filter = 'FILTER(?rated = "False")';
 
   var query = `
-  select (SAMPLE(?musica) as ?musica) ?nomeMusica ?nartista (MAX(?danceability) as ?danceability) (SAMPLE(?imagem) as ?imagem) where { 
+  select distinct (SAMPLE(?musica) as ?musica) ?nomeMusica ?nartista (MAX(?danceability) as ?danceability) (SAMPLE(?imagem) as ?imagem) where { 
     ?musica a :Musica .
     ?musica :nome ?nomeMusica .
     ?musica :ofAlbum ?album .
@@ -559,7 +559,7 @@ router.get('/musicas/ano/:ano', async function(req, res) {
   if (req.params.ano)
   {
     var query = `
-              select ?musica ?nomeMusica ?nomeAlbum ?nartista ?data where { 
+              select distinct ?musica ?nomeMusica ?nomeAlbum ?nartista ?data where { 
                 ?musica a :Musica .
                 ?musica :nome ?nomeMusica .
                 ?musica :ofAlbum ?album .
@@ -675,7 +675,7 @@ router.get('/musicas/duracao/:duracao', async function(req, res) {
 
   if (req.params.duracao){
     var query = `
-                select ?nomeMusica ?nomeAlbum ?nartista ?duracao where { 
+                select distinct ?nomeMusica ?nomeAlbum ?nartista ?duracao where { 
                   ?musica a :Musica .
                   ?musica :nome ?nomeMusica .
                   ?musica :duracao ?duracao .
