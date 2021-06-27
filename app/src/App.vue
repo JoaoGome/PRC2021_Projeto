@@ -40,7 +40,7 @@
         <v-list-item
           v-for="item in items"
           :key="item.title"
-          :to="item.to"
+          :href="item.to"
           link
         >
           <v-list-item-icon>
@@ -98,12 +98,14 @@
     },
     methods:{
       reloadRchanged(filterRrated){
-        window.location.href = `${window.location.pathname}?rRated=${filterRrated}`;
+        var rLetter = ''
+        if (this.$route.query.letter) rLetter = '&letter=' + this.$route.query.letter
+        window.location.href = `${window.location.pathname}?rRated=${filterRrated}${rLetter}`;
       },
       getURL(s){
         console.log(s)
         return '/'
-      }
+      },
     },
     watch: {
       rRated(newValue){

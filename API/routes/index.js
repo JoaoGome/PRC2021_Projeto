@@ -6,8 +6,11 @@ var gdb = require('../utils/graphdb')
 // devolve um array com lista de nomes dos artistas
 router.get('/artistas', async function(req, res) 
 {
-  var filter = ''
-  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  var filterRrated = ''
+  if (req.query.rRated && req.query.rRated === "false") filterRrated = 'FILTER(?rated = "False")'
+
+  var filterLetter = ''
+  if (req.query.letter) filterLetter = `FILTER (strstarts(str(ucase(?name)), '${req.query.letter}'))`
   
   var query = `
   select distinct ?id ?name (MIN(?rated) as ?rRated) where { 
@@ -16,7 +19,8 @@ router.get('/artistas', async function(req, res)
         :hasAlbum ?album .
     ?album :hasMusic ?m .
     ?m :ratedR ?rated .
-    ${filter}
+    ${filterRrated}
+    ${filterLetter}
 } 
 group by ?id ?name
 order by ?name
@@ -147,9 +151,12 @@ router.get('/artistas/:id', async function(req, res)
 // devolve um array com lista de nomes dos albuns
 router.get('/albuns', async function(req, res) 
 {
-  var filter = ''
-  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  var filterRrated = ''
+  if (req.query.rRated && req.query.rRated === "false") filterRrated = 'FILTER(?rated = "False")'
   
+  var filterLetter = ''
+  if (req.query.letter) filterLetter = `FILTER (strstarts(str(ucase(?name)), '${req.query.letter}'))`
+
   var query = `
   select distinct ?s ?name ?image ?artist ?d where { 
     ?s a :Album .
@@ -160,7 +167,8 @@ router.get('/albuns', async function(req, res)
     ?s :data ?d .
     ?s :hasMusic ?m .
     ?m :ratedR ?rated .
-    ${filter}
+    ${filterRrated}
+    ${filterLetter}
   }  
 GROUP BY ?s ?name ?image ?artist ?d
               `
@@ -424,9 +432,12 @@ router.get('/albuns/ano/:ano', async function(req, res)
 // devolve um array com lista de nomes das músicas
 router.get('/musicas', async function(req, res) 
 {
-  var filter = '';
-  if (req.query.rRated && req.query.rRated == "false") filter = 'FILTER(?rated = "False")';
-
+  var filterRrated = ''
+  if (req.query.rRated && req.query.rRated === "false") filterRrated = 'FILTER(?rated = "False")'
+  
+  var filterLetter = ''
+  if (req.query.letter) filterLetter = `FILTER (strstarts(str(ucase(?nomeMusica)), '${req.query.letter}'))`
+  
   var query =  `
   select distinct ?musica ?nomeMusica ?nomeAlbum ?nartista ?data where { 
     ?musica a :Musica .
@@ -437,7 +448,8 @@ router.get('/musicas', async function(req, res)
     ?artista :hasAlbum ?album .
     ?artista :nome ?nartista .
     ?album :data ?data .
-    ${filter}
+    ${filterRrated}
+    ${filterLetter}
   }
   order by (?nomeMusica) 
   `

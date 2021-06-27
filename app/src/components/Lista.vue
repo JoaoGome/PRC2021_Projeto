@@ -39,6 +39,7 @@
 
     methods:{
       handleClick(row){
+        if (this.$route.query.rRated == "false" ) this.filterRrated = '?rRated=false'
         window.location.href = '/' + this.tema.toLowerCase() + '/' + row.id + this.filterRrated ;
       }
     }

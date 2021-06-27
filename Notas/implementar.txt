@@ -1,4 +1,3 @@
-Pesquisa por alfabeto? -> todos os elementos da categoria que começam por essa letra
 
 PAGINA INDIVIDUAL
     - voltar para trás

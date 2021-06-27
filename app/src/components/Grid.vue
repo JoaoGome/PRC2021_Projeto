@@ -2,7 +2,7 @@
   <v-app>
     <v-container fluid>
     <v-data-iterator
-      v-model="thisone"
+      v-model="tabela"
       :items="elementos"
       :items-per-page.sync="itemsPerPage"
       :page.sync="page"
@@ -212,6 +212,7 @@
           return imagem
       },
       getURL(id){
+        if (this.$route.query.rRated == "false" ) this.filterRrated = '?rRated=false'
         if(this.tema === "Artist")
           return "/artist/" + id + this.filterRrated
         if(this.tema === "Album")
