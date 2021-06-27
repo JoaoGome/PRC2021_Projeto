@@ -9,7 +9,7 @@
           <div v-if="principal.imagem" class="text-center">
             <v-avatar
               class="ma-3"
-              size="200"
+              size="280"
               tile
             >
               <v-img :src="getImgUrl(principal.imagem)"></v-img>

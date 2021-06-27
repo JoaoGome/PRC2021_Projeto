@@ -13,12 +13,13 @@
           :key="item.id"
           cols="6"
           md="2"
+          
         >
-          <v-card height=100% :href="getURL(item.id)">
+          <v-card height=100% :href="getURL(item.id)" max-width="300">
             <v-img
               lazy-src="@/assets/music-image.jpeg"
               :src="`${getImgUrl(item.imagem)}`"
-              max-width="200"
+              max-width="100%"
             ></v-img>
             <v-card-title class="justify-center align-center">
               {{ item.name }}
