@@ -1,15 +1,16 @@
 <template>
   <v-container fluid fill-height>
-    <v-card width="100vw">
+    <v-card width="100vw" class="blue lighten-5">
       <v-data-table
+        dense 
         v-model="musica"
         :headers="headers"
         :items="elementos"
         :search="search"
-        :sort-by="[]"
-        :sort-desc="[]"
+        :sort-by="sort"
+        :sort-desc="sortdesc"
         multi-sort
-        class="elevation-1"
+        class="elevation-1 blue lighten-5"
         @click:row="handleClick"
       >
       <template v-slot:top>
@@ -17,7 +18,7 @@
             v-model="search"
             :label="label"
             class="mx-4"
-          ></v-text-field>
+          >{{elementos}}</v-text-field>
       </template>
       </v-data-table> 
     </v-card>
@@ -25,58 +26,20 @@
 </template>
 
 <script>
-  import axios from 'axios';
   export default {
-    props:["site", "tema"],
+    props:["tema", "elementos", "headers", "sort", "sortdesc"],
 
     data () {
       return {
         search: '',
         label: "Search for " + this.tema + " Names",
-        elementos: [],
         filterRrated: '',
       }
     },
-    computed: {
-      headers () {
-        return [
-          {
-            text: 'Musica',
-            align: 'start',
-            value: 'musica',
-          },
-          {
-            text: 'Album',
-            value: 'album',
-            filterable: false
-          },
-          { 
-            text: 'Artista', 
-            value: 'artista', 
-            filterable: false
-          },
-          { 
-            text: 'Date', 
-            value: 'date', 
-            filterable: false
-          },
-        ]
-      },
-    },
-    created: function () {
-      if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
-      
-      axios
-        .get('http://localhost:8080/teste/'+ this.site + this.filterRrated)
-        .then(res => {
-          this.elementos = res.data;            
-          this.search = ''
-        })
-        .catch(this.r = 'error' )
-    },
+
     methods:{
       handleClick(row){
-        window.location.href = `/music/` + row.id + this.filterRrated ;
+        window.location.href = '/' + this.tema.toLowerCase() + '/' + row.id + this.filterRrated ;
       }
     }
   }

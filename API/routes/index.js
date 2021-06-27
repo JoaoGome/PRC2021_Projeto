@@ -29,7 +29,7 @@ order by ?name
       results.push({
         "id": b.s.value.split('#')[1],
         "name": b.name.value,
-        "imagem": b.name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "") + ".jpeg"
+        "imagem": b.name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('!','') + ".jpeg"
       });
   })
 
@@ -64,7 +64,7 @@ limit 60
       "id": b.art.value.split('#')[1],
       "name": b.nartista.value,
       "popularity": b.popularity.value,
-      "imagem": b.nartista.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "") + ".jpeg"
+      "imagem": b.nartista.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('!','') + ".jpeg"
     }
 
     results.push(info)
@@ -138,7 +138,7 @@ GROUP BY ?s ?name ?image ?artist ?d
       results.push({
         "name":b.name.value, 
         "artist":b.artist.value, 
-        "imagem":b.image.value.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), 
+        "imagem":b.image.value, 
         "year":b.d.value.split('-')[0], 
         "date":b.d.value, 
         "id":b.s.value.split('#')[1]
@@ -184,7 +184,7 @@ limit 100
       "name": b.nome.value,
       "artist": b.nartista.value,
       "popularity": b.popularity.value,
-      "imagem": b.imagem.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      "imagem": b.imagem.value
     }
 
     results.push(info)
@@ -230,7 +230,7 @@ limit 100
       "name": b.nome.value,
       "artist": b.nartista.value,
       "danceability": b.danceability.value,
-      "imagem": b.imagem.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      "imagem": b.imagem.value
     }
 
     results.push(info)
@@ -242,18 +242,28 @@ limit 100
 });
 
 // vai buscar os dados do album
-router.get('/albuns/:name', async function(req, res) 
+router.get('/albuns/:id', async function(req, res) 
 {
-  if (req.params.name)
+  var filter = ''
+  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  if (req.params.id)
   {
     var query = `
-              select ?image ?numeroTracks ?data where { 
-                ?album a :Album .
-                ?album :nome "${req.params.name}" .
-                ?album :image ?image .
-                ?album :numberTracks ?numeroTracks .
-                ?album :data ?data .
-              }
+              select ?artista_id ?artista_name ?nome ?image ?numeroTracks ?data (GROUP_CONCAT(?music_nr;separator="|") as ?music_nr) (GROUP_CONCAT(?music_dur;separator="|") as ?music_dur) (GROUP_CONCAT(?music_id) as ?music_id) (GROUP_CONCAT(?music;separator="|") as ?music) where { 
+                :${req.params.id} :nome ?nome ;
+                                  :image ?image ;
+                                  :numberTracks ?numeroTracks ;
+                                  :data ?data ;
+                                  :hasMusic ?music_id .
+                ?artista_id :hasAlbum :${req.params.id} ;
+                            :nome ?artista_name .
+                ?music_id :ratedR ?rated ;
+                          :nome ?music ;
+                          :duracao ?music_dur ;
+                          :musicNumber ?music_nr .
+                ${filter}
+            }
+            GROUP BY ?nome ?image ?numeroTracks ?data ?artista_id ?artista_name
                 `
 
     var result = await gdb.execQuery(query);
@@ -262,10 +272,29 @@ router.get('/albuns/:name', async function(req, res)
     result.results.bindings.map(b => {
       info = 
       {
-        "image": b.image.value,
-        "data": b.data.value,
-        "numeroTracks": b.numeroTracks.value,
-        "nome": req.params.name
+        "id": req.params.id,
+        "imagem": b.image.value,
+        "name": b.nome.value,
+        "date": b.data.value,
+        "tracks": b.numeroTracks.value,
+        "artist":{
+          "id": b.artista_id.value.split('#')[1],
+          "name": b.artista_name.value,
+          "imagem": b.artista_name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('!','') + ".jpeg"
+        },
+        "music":[]
+      }
+      var music_ids = b.music_id.value.split(" ")
+      var music_names = b.music.value.split("|")
+      var music_durs = b.music_dur.value.split("|")
+      var music_nrs = b.music_nr.value.split("|")
+      for (var i=0; i < music_ids.length ; i++){
+        info["music"].push({
+          "id": music_ids[i].split('#')[1],
+          "musica": music_names[i],
+          "duration": music_durs[i],
+          "nr": music_nrs[i],
+        })
       }
       results.push(info)
     })
@@ -428,7 +457,7 @@ router.get('/musicas/popularidade', async function(req, res)
       "artist": b.nartista.value,
       "popularity": b.popularity.value,
       "date": b.data.value,
-      "imagem": b.imagem.value.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
+      "imagem": b.imagem.value
     }
 
     results.push(info)
@@ -472,7 +501,7 @@ limit 100
       "name": b.nomeMusica.value,
       "artist": b.nartista.value,
       "danceability": b.danceability.value,
-      "imagem": b.imagem.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      "imagem": b.imagem.value
     }
 
     results.push(info)

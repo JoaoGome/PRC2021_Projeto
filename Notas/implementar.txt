@@ -2,7 +2,7 @@ Pesquisa por alfabeto -> todos os elementos da categoria que começam por essa l
 
 GERAL 
     - cores
-    - fix search grid
+    - verificar casos opcionais de nao ter certo parametro
 
 ARTISTAS 
     - Pesquisa por alfabeto
@@ -15,9 +15,8 @@ MUSICA
 
 
 PAGINA INDIVIDUAL
+    - voltar para trás
     - artista 
-    - album
+        - sort album by date
     - musica
 
-error:
-- panic image

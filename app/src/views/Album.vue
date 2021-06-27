@@ -3,17 +3,21 @@
     width=100%
     class="mx-auto"
   >
-    <Individual tema="Music" :items="items" :principal="principal"  />
+    <Individual tema="Music" :items="items" :principal="principal" />
+
+    <Lista tema="Music" :elementos="elementos" :headers="headers" :sort="['nr']" :sortdesc="[]" />
   </v-card>
 
 </template>
 
 <script>
+import Lista from "@/components/Lista.vue";
 import Individual from "@/components/Individual.vue";
 
 import axios from 'axios';
 export default {
   components: {
+    Lista,
     Individual
   },
 
@@ -69,6 +73,10 @@ export default {
         {
           text: "Duration",
           value: 'duration',
+        },
+        {
+          text: "Track Number",
+          value: 'nr',
         },
       ]
     },

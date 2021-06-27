@@ -10,6 +10,7 @@
       :sort-by="sortBy.toLowerCase()"
       :sort-desc="sortDesc"
       hide-default-footer
+      :custom-filter="customFilter"
     >
       <template v-slot:header>
         <v-toolbar
@@ -228,6 +229,13 @@
           return "/artist/" + id + this.filterRrated
         if(this.tema === "Album")
           return "/album/" + id + this.filterRrated
+      },
+      customFilter(items, search) {
+        if (search.trim() === '') return items;
+
+        return items.filter(item => {
+          return item.name.toLowerCase().includes(search.toLowerCase());
+        }, search);
       }
     },
     
