@@ -6,7 +6,7 @@
           color="#385F73"
           dark
         >
-          <div class="text-center">
+          <div v-if="principal.imagem" class="text-center">
             <v-avatar
               class="ma-3"
               size="200"
@@ -25,13 +25,13 @@
 
 
           <v-row>
-            <v-col>
-              <v-card-subtitle>Date: {{principal.date}}</v-card-subtitle>
+            <v-col v-for="(key, i) in Object.keys(principal.info)" :key="i">
+              <v-card-subtitle>{{key.charAt(0).toUpperCase() + key.slice(1)}}: {{ principal.info[key] }}</v-card-subtitle>
             </v-col>
-            <v-col>
-              <v-card-subtitle>Number of Tracks: {{principal.tracks}} </v-card-subtitle>
-            </v-col>
+
           </v-row>
+
+          <v-divider></v-divider>
 
         </v-card>
       </v-col>

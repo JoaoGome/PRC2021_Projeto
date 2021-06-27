@@ -1,10 +1,10 @@
 <template>
   <v-app id="inspire">
-    <v-system-bar app>
+    <v-system-bar app class="pink lighten-5">
       <v-spacer></v-spacer>
     </v-system-bar>
 
-    <v-app-bar app>
+    <v-app-bar app >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-img
         lazy-src="@/assets/music.png"
@@ -24,8 +24,6 @@
         <v-list-item-content>
           <v-list-item-title class="text-h6">
             Music Time
-            {{this.$route.query.rRated}}
-            {{this.printit}}
           </v-list-item-title>
           <v-list-item-subtitle>
             Search it!
@@ -60,12 +58,12 @@
       <v-switch
         v-model="rRated"
         :label="`R-Rated Music`"
-        color="red"
+        color="cyan"
         class="ml-4"
       ></v-switch>
 
     </v-navigation-drawer>
-      <v-main class="grey lighten-2">
+      <v-main class="pink lighten-5">
         <v-container>
           <router-view :rRated="rRated" />
         </v-container>

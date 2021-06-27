@@ -15,7 +15,7 @@
       <template v-slot:header>
         <v-toolbar
           dark
-          color="blue darken-3"
+          color="#1F7087"
           class="mb-1"
         >
           <v-text-field
@@ -46,7 +46,7 @@
               <v-btn
                 large
                 depressed
-                color="blue"
+                color="#1F7087"
                 :value="false"
               >
                 <v-icon>mdi-arrow-up</v-icon>
@@ -54,7 +54,7 @@
               <v-btn
                 large
                 depressed
-                color="blue"
+                color="#1F7087"
                 :value="true"
               >
                 <v-icon>mdi-arrow-down</v-icon>
@@ -74,7 +74,7 @@
             md="4"
             lg="3"
           >
-            <v-card height=100% :href="getURL(item.id)">
+            <v-card height=100% :href="getURL(item.id)"  color="cyan  lighten-5">
               <v-img
                 lazy-src="@/assets/music-image.jpeg"
                 :src="getImgUrl(item.imagem)"
@@ -85,7 +85,7 @@
 
               <v-divider></v-divider>
 
-              <v-list dense>
+              <v-list dense  color="cyan lighten-5">
                 <v-list-item 
                   v-for="(key, index) in keysShow"
                   :key="index"
@@ -117,7 +117,7 @@
               <v-btn
                 dark
                 text
-                color="primary"
+                color="#1F7087"
                 class="ml-2"
                 v-bind="attrs"
                 v-on="on"
@@ -148,7 +148,7 @@
           <v-btn
             fab
             dark
-            color="blue darken-3"
+            color="#1F7087"
             class="mr-1"
             @click="formerPage"
           >
@@ -157,7 +157,7 @@
           <v-btn
             fab
             dark
-            color="blue darken-3"
+            color="#1F7087"
             class="ml-1"
             @click="nextPage"
           >
@@ -173,13 +173,11 @@
 </template>
 
 <script>
-  import axios from 'axios';
   export default {
-    props:["site", "tema", "keysSort", "keysShow"],
+    props:["tema", "keysSort", "keysShow", "elementos"],
 
     data () {
       return {
-        elementos:[],
         itemsPerPageArray: [8, 12, 24],
         search: '',
         filter: {},
@@ -189,17 +187,6 @@
         sortBy: 'name',
         filterRrated: '',
       }
-    },
-    created: function () {
-      if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
-      axios
-        .get('http://localhost:8080/teste/' + this.site + this.filterRrated)
-        .then(res => {
-          this.elementos = res.data;
-
-          this.search = ''
-        })
-        .catch(this.r = 'error' )
     },
     computed: {
       numberOfPages () {

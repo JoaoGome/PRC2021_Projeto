@@ -43,16 +43,25 @@ export default {
     if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
     
     axios
-      .get('http://localhost:8080/teste/albuns/' + this.$route.params.id + this.filterRrated)
+      .get('http://localhost:8080/teste/musicas/' + this.$route.params.id + this.filterRrated)
       .then(res => {
-        this.principal = res.data[0]
-        this.items = [{
-          id: res.data[0]["artist"]["id"],
-          color: '#1F7087',
-          src: this.getImgUrl(res.data[0]["artist"]["imagem"]),
-          title: res.data[0]["artist"]["name"],
-          subtext: "Artist"
-        }]
+        this.principal = res.data[0]["principal"]
+        this.items = [
+          {
+            id: res.data[0]["album"]["id"],
+            color: '#1F7087',
+            src: this.getImgUrl(res.data[0]["album"]["imagem"]),
+            title: res.data[0]["album"]["name"],
+            subtext: "Album"
+          },
+          {
+            id: res.data[0]["artist"]["id"],
+            color: '#0097A7',
+            src: this.getImgUrl(res.data[0]["artist"]["imagem"]),
+            title: res.data[0]["artist"]["name"],
+            subtext: "Artist"
+          }
+        ]
         this.elementos = res.data[0]["music"]; 
 
       })

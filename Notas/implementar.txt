@@ -1,22 +1,6 @@
-Pesquisa por alfabeto -> todos os elementos da categoria que começam por essa letra
-
-GERAL 
-    - cores
-    - verificar casos opcionais de nao ter certo parametro
-
-ARTISTAS 
-    - Pesquisa por alfabeto
-
-ALBUNS 
-    - Pesquisa por alfabeto
-
-MUSICA 
-    - Pesquisa por alfabeto
-
+Pesquisa por alfabeto? -> todos os elementos da categoria que começam por essa letra
 
 PAGINA INDIVIDUAL
     - voltar para trás
-    - artista 
-        - sort album by date
-    - musica
+
 

@@ -49,7 +49,7 @@ export default {
     axios
       .get('http://localhost:8080/teste/albuns/' + this.$route.params.id + this.filterRrated)
       .then(res => {
-        this.principal = res.data[0]
+        this.principal = res.data[0]["principal"]
         this.items = [{
           id: res.data[0]["artist"]["id"],
           color: '#1F7087',

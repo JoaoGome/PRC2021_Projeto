@@ -1,6 +1,6 @@
 <template>
   <v-container fluid fill-height>
-    <v-card width="100vw" class="blue lighten-5">
+    <v-card width="100vw">
       <v-data-table
         dense 
         v-model="musica"
@@ -10,7 +10,7 @@
         :sort-by="sort"
         :sort-desc="sortdesc"
         multi-sort
-        class="elevation-1 blue lighten-5"
+        class="elevation-1"
         @click:row="handleClick"
       >
       <template v-slot:top>

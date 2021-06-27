@@ -3,9 +3,9 @@
     width=100%
     class="mx-auto"
   >
-    <Individual :items="items" :principal="principal" />
+    <Individual :elementos="elementos" :items="items" :principal="principal" />
 
-    <Grid tema="Album" :elementos="elementos"/>
+    <Grid tema="Album" :elementos="elementos" :keysSort="['Name', 'Date']" :keysShow="['Year']" />
   </v-card>
 
 </template>
@@ -33,10 +33,10 @@ export default {
     if (this.$route.query.rRated == "false") this.filterRrated = '?rRated=false'
     
     axios
-      .get('http://localhost:8080/teste/artist/' + this.$route.params.id + this.filterRrated)
+      .get('http://localhost:8080/teste/artistas/' + this.$route.params.id + this.filterRrated)
       .then(res => {
-        res.data[0]["imagem"] = this.getImgUrl( res.data[0]["imagem"] )
-        this.principal = res.data[0]
+        res.data[0]["principal"]["imagem"] = this.getImgUrl( res.data[0]["principal"]["imagem"] )
+        this.principal = res.data[0]["principal"]
         this.elementos = res.data[0]["albuns"]; 
       })
       .catch(this.r = 'error' )

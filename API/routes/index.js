@@ -6,28 +6,28 @@ var gdb = require('../utils/graphdb')
 // devolve um array com lista de nomes dos artistas
 router.get('/artistas', async function(req, res) 
 {
+  var filter = ''
+  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  
   var query = `
-  select ?s ?name (MIN(?rated) as ?rRated) where { 
-    ?s a :Artista .
-    ?s :nome ?name .
-    ?s :hasAlbum ?album .
+  select ?id ?name (MIN(?rated) as ?rRated) where { 
+    ?id a :Artista .
+    ?id :nome ?name ;
+        :hasAlbum ?album .
     ?album :hasMusic ?m .
     ?m :ratedR ?rated .
+    ${filter}
 } 
-group by ?s ?name
+group by ?id ?name
 order by ?name
               `
 
   var result = await gdb.execQuery(query);
   var results = [];
-  
-  var filter = false
-  if (req.query.rRated && req.query.rRated == "false") filter = true;
-  
+
   result.results.bindings.map(b => {
-    if (!filter || (filter && b.rRated.value == "False") )
       results.push({
-        "id": b.s.value.split('#')[1],
+        "id": b.id.value.split('#')[1],
         "name": b.name.value,
         "imagem": b.name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('!','') + ".jpeg"
       });
@@ -40,6 +40,9 @@ order by ?name
 // vai buscar lista de artistas ordenados por popularity (devolve nome e imagem do artista) 
 router.get('/artistas/popularity', async function(req, res) 
 {
+  var filter = ''
+  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  
   var query = `
   select ?art ?nartista (SUM(?popularity) as ?popularity) (MIN(?rated) as ?rRated) where { 
     ?art a :Artista .
@@ -49,6 +52,7 @@ router.get('/artistas/popularity', async function(req, res)
     ?m :ratedR ?rated .
     ?music :popularity ?popularity .
     ?art :nome ?nartista .
+    ${filter}
   }
 group by ?art ?nartista 
 order by desc (?popularity) 
@@ -75,21 +79,20 @@ limit 60
 
 });
 
-
 // vai buscar os albuns + imagem deste artista
-router.get('/artistas/:name', async function(req, res) 
+router.get('/artistas/:id', async function(req, res) 
 {
-  if (req.params.name)
+  var filter = ''
+  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  
+  if (req.params.id)
   {
     var query = `
-              select ?name ?image where { 
-                ?artista a :Artista .
-                ?artista :nome "${req.params.name}" .
-                ?artista :hasAlbum ?album .
-                ?album :nome ?name .
-                ?album :image ?image .
-              }
-              order by (?name)
+    select ?name (COUNT(?album_id) as ?nr) where { 
+      :${req.params.id} :nome ?name ;
+                        :hasAlbum ?album_id .
+    }
+    group by ?name
                 `
 
     var result = await gdb.execQuery(query);
@@ -98,11 +101,41 @@ router.get('/artistas/:name', async function(req, res)
     result.results.bindings.map(b => {
       info = 
       {
-        "nome": b.name.value,
-        "image": b.image.value
+        "principal":{
+          "name": b.name.value,
+          "imagem": b.name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('!','') + ".jpeg",
+          "info":{
+            "albuns": b.nr.value
+          }
+        },
+        "albuns": []
       }
       results.push(info)
     })
+
+    var query = `
+    select distinct ?id ?name ?imagem ?date where {
+      :${req.params.id} :hasAlbum ?id .
+      ?id :nome ?name ;
+          :image ?imagem ;
+          :data ?date ;
+          :hasMusic ?m .
+      ?m :ratedR ?rated .
+      ${filter}
+    }  
+    `
+    var result = await gdb.execQuery(query);
+
+    result.results.bindings.map(b => {
+      results[0]["albuns"].push({
+        "name":b.name.value, 
+        "imagem":b.imagem.value, 
+        "year":b.date.value.split('-')[0], 
+        "date":b.date.value, 
+        "id":b.id.value.split('#')[1]
+      })
+    })
+
 
     res.send(results);
   }
@@ -110,11 +143,15 @@ router.get('/artistas/:name', async function(req, res)
 
 });
 
+
 // devolve um array com lista de nomes dos albuns
 router.get('/albuns', async function(req, res) 
 {
+  var filter = ''
+  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  
   var query = `
-  select ?s ?name ?image ?artist ?d (MIN(?rated) as ?rRated) where { 
+  select ?s ?name ?image ?artist ?d where { 
     ?s a :Album .
     ?s :nome ?name .
     ?s :image ?image .
@@ -123,6 +160,7 @@ router.get('/albuns', async function(req, res)
     ?s :data ?d .
     ?s :hasMusic ?m .
     ?m :ratedR ?rated .
+    ${filter}
   }  
 GROUP BY ?s ?name ?image ?artist ?d
               `
@@ -130,29 +168,27 @@ GROUP BY ?s ?name ?image ?artist ?d
   var result = await gdb.execQuery(query);
   var results = [];
 
-  var filter = false
-  if (req.query.rRated && req.query.rRated == "false") filter = true;
-  
   result.results.bindings.map(b => {
-    if (!filter || (filter && b.rRated.value == "False") )
-      results.push({
-        "name":b.name.value, 
-        "artist":b.artist.value, 
-        "imagem":b.image.value, 
-        "year":b.d.value.split('-')[0], 
-        "date":b.d.value, 
-        "id":b.s.value.split('#')[1]
-      });
+    results.push({
+      "name":b.name.value, 
+      "artist":b.artist.value, 
+      "imagem":b.image.value, 
+      "year":b.d.value.split('-')[0], 
+      "date":b.d.value, 
+      "id":b.s.value.split('#')[1]
+    });
   })
 
   res.send(results);
 
 });
 
-
 // vai buscar lista de albuns ordenados por danceability (devolve nome e imagem do album, artista e danceability) 
 router.get('/albuns/popularity', async function(req, res) 
 {
+  var filter = ''
+  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  
   var query = `
   select ?album ?nome ?nartista (SUM(?popularity) as ?popularity) (SAMPLE(?imagem) as ?imagem) (MIN(?rated) as ?rRated) where { 
     ?album a :Album .
@@ -164,6 +200,7 @@ router.get('/albuns/popularity', async function(req, res)
     ?artista :nome ?nartista .
     ?album :hasMusic ?m .
     ?m :ratedR ?rated .
+    ${filter}
   }
 group by ?album ?nome ?nartista 
 order by desc (?popularity) 
@@ -173,11 +210,7 @@ limit 100
   var result = await gdb.execQuery(query);
   var results = [];
 
-  var filter = false
-  if (req.query.rRated && req.query.rRated == "false") filter = true;
-  
   result.results.bindings.map(b => {
-    if (!filter || (filter && b.rRated.value == "False") )
     info = 
     {
       "id": b.album.value.split('#')[1],
@@ -198,6 +231,9 @@ limit 100
 // vai buscar lista de albuns ordenados por danceability (devolve nome e imagem do album, artista e danceability) 
 router.get('/albuns/danceability', async function(req, res) 
 {
+  var filter = ''
+  if (req.query.rRated && req.query.rRated === "false") filter = 'FILTER(?rated = "False")'
+  
   var query = `
   select ?album ?nome ?nartista (SUM(?danceability) as ?danceability) (SAMPLE(?imagem) as ?imagem) (MIN(?rated) as ?rRated) where { 
     ?album a :Album .
@@ -209,6 +245,7 @@ router.get('/albuns/danceability', async function(req, res)
     ?artista :nome ?nartista .
     ?album :hasMusic ?m .
     ?m :ratedR ?rated .
+    ${filter}
     
   }
 group by ?album ?nome ?nartista 
@@ -219,11 +256,7 @@ limit 100
   var result = await gdb.execQuery(query);
   var results = [];
 
-  var filter = false
-  if (req.query.rRated && req.query.rRated == "false") filter = true;
-  
   result.results.bindings.map(b => {
-    if (!filter || (filter && b.rRated.value == "False") )
     info = 
     {
       "id": b.album.value.split('#')[1],
@@ -272,15 +305,19 @@ router.get('/albuns/:id', async function(req, res)
     result.results.bindings.map(b => {
       info = 
       {
-        "id": req.params.id,
-        "imagem": b.image.value,
-        "name": b.nome.value,
-        "date": b.data.value,
-        "tracks": b.numeroTracks.value,
         "artist":{
           "id": b.artista_id.value.split('#')[1],
           "name": b.artista_name.value,
           "imagem": b.artista_name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('!','') + ".jpeg"
+        },
+        "principal": {
+          "id": req.params.id,
+          "imagem": b.image.value,
+          "name": b.nome.value,
+          "info":{
+            "date": b.data.value,
+            "tracks": b.numeroTracks.value,
+          },
         },
         "music":[]
       }
@@ -305,7 +342,7 @@ router.get('/albuns/:id', async function(req, res)
 
 });
 
-// vai buscar os nomes e duraçao de cada musica do album
+// (not used) vai buscar os nomes e duraçao de cada musica do album
 router.get('/albuns/musics/:name', async function(req, res) 
 {
   if (req.params.name)
@@ -338,7 +375,7 @@ router.get('/albuns/musics/:name', async function(req, res)
 
 });
 
-// vai buscar lista de albuns de um dado ano. (artista, album)
+// (not used) vai buscar lista de albuns de um dado ano. (artista, album)
 router.get('/albuns/ano/:ano', async function(req, res) 
 {
 
@@ -382,6 +419,7 @@ router.get('/albuns/ano/:ano', async function(req, res)
     }
   
 });
+
 
 // devolve um array com lista de nomes das músicas
 router.get('/musicas', async function(req, res) 
@@ -512,8 +550,7 @@ limit 100
 
 });
 
-
-// vai buscar lista de musicas de um dado ano. (devolve nome musica, artista, album)
+// (not used) vai buscar lista de musicas de um dado ano. (devolve nome musica, artista, album)
 router.get('/musicas/ano/:ano', async function(req, res) {
 
   var filter = '';
@@ -559,41 +596,66 @@ router.get('/musicas/ano/:ano', async function(req, res) {
   
 });
 
-
-// vai buscar toda a informação de musicas com o nome
-router.get('/musicas/:name', async function(req, res) 
+// vai buscar toda a informação de musicas com o id
+router.get('/musicas/:id', async function(req, res) 
 {
-  if (req.params.name)
+  if (req.params.id)
   {
     var query = `
-                select ?nartista ?duracao ?nome ?danceability ?popularity ?ratedR ?ano where { 
-                  ?musica a :Musica .
-                  ?musica :nome "${req.params.name}" .
-                  ?musica :duracao ?duracao .
-                  ?musica :danceability ?danceability .
-                  ?musica :popularity ?popularity .
-                  ?musica :ratedR ?ratedR .
-                  ?musica :ofAlbum ?album .
-                  ?album :nome ?nome .
-                  ?album :data ?ano .
-                  ?artista :hasAlbum ?album .
-                  ?artista :nome ?nartista .
-                }
+    select ?name ?duration ?danceability ?popularity ?ratedR ?date ?album_id ?album_name ?album_imagem ?artist_id ?artist_name where { 
+      :${req.params.id} :nome ?name ;
+                          :duracao ?duration ;
+                          :danceability ?danceability ;
+                          :popularity ?popularity ;
+                          :ratedR ?ratedR ;
+                          :ofAlbum ?album_id .
+      ?album_id :nome ?album_name ;
+                :data ?date ;
+                :image ?album_imagem .
+      ?artist_id :hasAlbum ?album_id .
+      ?artist_id :nome ?artist_name .
+    }
                 `
 
     var result = await gdb.execQuery(query);
     var results = [];
   
     result.results.bindings.map(b => {
+      var dance = "average"
+      if (b.danceability.value > 90) dance = "very high"
+      else if (b.danceability.value > 70) dance = "high"
+      else if (b.danceability.value < 35) dance = "low"
+      else if (b.danceability.value < 15) dance = "very low"
+      var popular = "average"
+      if (b.danceability.value > 0.90) popular = "very high"
+      else if (b.danceability.value > 0.70) popular = "high"
+      else if (b.danceability.value < 0.35) popular = "low"
+      else if (b.danceability.value < 0.15) popular = "very low"
+      
       info = 
       {
-        "artista": b.nartista.value,
-        "duracao": b.duracao.value,
-        "album": b.nome.value,
-        "danceability": b.danceability.value,
-        "popularity": b.popularity.value,
-        "ratedR": b.ratedR.value,
-        "data": b.ano.value
+        "artist": {
+          "id": b.artist_id.value.split('#')[1],
+          "name": b.artist_name.value,
+          "imagem": b.artist_name.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('!','') + ".jpeg"
+        },
+        "album": {
+          "id": b.album_id.value.split('#')[1],
+          "name": b.album_name.value,
+          "imagem": b.album_imagem.value
+        },
+        "principal":{
+          "name": b.name.value,
+          "info":{
+            "duration": b.duration.value,
+            "date": b.date.value,
+            "danceability": dance,
+            "popularity": popular,
+          },
+        }
+      }
+      if ( b.ratedR.value === "True"){
+        info["principal"]["info"][""] = "R-Rated"
       }
 
       results.push(info)
@@ -605,8 +667,7 @@ router.get('/musicas/:name', async function(req, res)
 
 });
 
-
-// vai buscar todas as musicas com menor duração 
+// (not used) vai buscar todas as musicas com menor duração 
 router.get('/musicas/duracao/:duracao', async function(req, res) {
   
   var filter = '';
@@ -650,52 +711,5 @@ router.get('/musicas/duracao/:duracao', async function(req, res) {
 
 });
 
-// vai buscar toda a informação de uma musica de um dado album
-router.get('/musicas/:album/:name', async function(req, res) 
-{
-  var filter = '';
-  if (req.query.rRated && req.query.rRated == "false") filter = 'FILTER(?rated = "False")';
-
-  if (req.params.name && req.params.album)
-  {
-    var query = `
-                  select ?nartista ?duracao ?danceability ?popularity ?ratedR ?ano where { 
-                    ?musica a :Musica .
-                    ?musica :nome "${req.params.name}" .
-                    ?musica :duracao ?duracao .
-                    ?musica :danceability ?danceability .
-                    ?musica :popularity ?popularity .
-                    ?musica :ratedR ?ratedR .
-                    ?musica :ofAlbum ?album .
-                    ?album :nome "${req.params.album}" .
-                    ?album :data ?ano .
-                    ?artista :hasAlbum ?album .
-                    ?artista :nome ?nartista .
-                    ${filter}
-                }
-                `
-
-    var result = await gdb.execQuery(query);
-    var results = [];
-  
-    result.results.bindings.map(b => {
-      info = 
-      {
-        "artista": b.nartista.value,
-        "duracao": b.duracao.value,
-        "album": req.params.album,
-        "danceability": b.danceability.value,
-        "popularity": b.popularity.value,
-        "ratedR": b.ratedR.value,
-        "data": b.ano.value
-      }
-
-      results.push(info)
-    })
-
-    res.send(results);
-  }
-
-});
 
 module.exports = router;
